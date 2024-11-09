@@ -1,9 +1,9 @@
 #include "edge_vertex.hpp"
 
+#include <ipc/distance/point_edge.hpp>
 #include <ipc/friction/closest_point.hpp>
 #include <ipc/friction/relative_velocity.hpp>
 #include <ipc/friction/tangent_basis.hpp>
-#include <ipc/distance/point_edge.hpp>
 
 namespace ipc {
 
@@ -24,6 +24,20 @@ EdgeVertexFrictionCollision::EdgeVertexFrictionCollision(
 {
     FrictionCollision::init(
         collision, positions, barrier_potential, barrier_stiffness);
+}
+
+EdgeVertexFrictionCollision::EdgeVertexFrictionCollision(
+    const EdgeVertexCollision& collision,
+    const VectorMax12d& positions,
+    const BarrierPotential& barrier_potential,
+    const double barrier_stiffness,
+    const double static_mu,
+    const double kinetic_mu)
+    : EdgeVertexFrictionCollision(collision)
+{
+    FrictionCollision::init(
+        collision, positions, barrier_potential, barrier_stiffness, static_mu,
+        kinetic_mu);
 }
 
 // ============================================================================

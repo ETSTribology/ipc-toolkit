@@ -1,9 +1,9 @@
 #include "vertex_vertex.hpp"
 
+#include <ipc/distance/point_point.hpp>
 #include <ipc/friction/closest_point.hpp>
 #include <ipc/friction/relative_velocity.hpp>
 #include <ipc/friction/tangent_basis.hpp>
-#include <ipc/distance/point_point.hpp>
 
 namespace ipc {
 
@@ -24,6 +24,20 @@ VertexVertexFrictionCollision::VertexVertexFrictionCollision(
 {
     FrictionCollision::init(
         collision, positions, barrier_potential, barrier_stiffness);
+}
+
+VertexVertexFrictionCollision::VertexVertexFrictionCollision(
+    const VertexVertexCollision& collision,
+    const VectorMax12d& positions,
+    const BarrierPotential& barrier_potential,
+    const double barrier_stiffness,
+    const double static_mu,
+    const double kinetic_mu)
+    : VertexVertexFrictionCollision(collision)
+{
+    FrictionCollision::init(
+        collision, positions, barrier_potential, barrier_stiffness, static_mu,
+        kinetic_mu);
 }
 
 // ============================================================================

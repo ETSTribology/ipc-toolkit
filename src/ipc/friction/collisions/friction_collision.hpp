@@ -1,12 +1,11 @@
 #pragma once
 
-#include <ipc/potentials/barrier_potential.hpp>
+#include <ipc/config.hpp>
+#include <ipc/barrier/barrier.hpp>
 #include <ipc/friction/relative_velocity.hpp>
 #include <ipc/friction/smooth_friction_mollifier.hpp>
+#include <ipc/potentials/barrier_potential.hpp>
 #include <ipc/utils/eigen_ext.hpp>
-#include <ipc/barrier/barrier.hpp>
-
-#include <ipc/config.hpp>
 
 namespace ipc {
 
@@ -22,6 +21,34 @@ protected:
         const VectorMax12d& positions,
         const BarrierPotential& barrier_potential,
         const double barrier_stiffness);
+
+    /// @brief Initialize the collision.
+    /// @param collision Collision stencil.
+    /// @param positions Collision stencil's vertex positions.
+    /// @param barrier_potential Barrier potential used for normal force.
+    /// @param barrier_stiffness Barrier potential stiffness.
+    /// @param mu Static friction coefficient.
+    void init(
+        const Collision& collision,
+        const VectorMax12d& positions,
+        const BarrierPotential& barrier_potential,
+        const double barrier_stiffness,
+        double mu);
+
+    /// @brief Initialize the collision.
+    /// @param collision Collision stencil.
+    /// @param positions Collision stencil's vertex positions.
+    /// @param barrier_potential Barrier potential used for normal force.
+    /// @param barrier_stiffness Barrier potential stiffness.
+    /// @param static_mu Static friction coefficient.
+    /// @param kinetic_mu Kinetic friction coefficient.
+    void init(
+        const Collision& collision,
+        const VectorMax12d& positions,
+        const BarrierPotential& barrier_potential,
+        const double barrier_stiffness,
+        double static_mu,
+        double kinetic_mu);
 
 public:
     virtual ~FrictionCollision() = default;
@@ -114,6 +141,12 @@ public:
 
     /// @brief Coefficient of friction
     double mu;
+
+    /// @brief Static friction coefficient
+    double s_mu;
+
+    /// @brief Kinetic friction coefficient
+    double k_mu;
 
     /// @brief Weight
     double weight = 1;

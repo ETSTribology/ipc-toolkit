@@ -1,7 +1,7 @@
 #pragma once
 
-#include <ipc/friction/collisions/friction_collision.hpp>
 #include <ipc/candidates/face_vertex.hpp>
+#include <ipc/friction/collisions/friction_collision.hpp>
 #include <ipc/utils/eigen_ext.hpp>
 
 namespace ipc {
@@ -18,6 +18,14 @@ public:
         const VectorMax12d& positions,
         const BarrierPotential& barrier_potential,
         const double barrier_stiffness);
+
+    FaceVertexFrictionCollision(
+        const FaceVertexCollision& collision,
+        const VectorMax12d& positions,
+        const BarrierPotential& barrier_potential,
+        const double barrier_stiffness,
+        const double static_mu,
+        const double kinetic_mu);
 
 protected:
     MatrixMax<double, 3, 2>
