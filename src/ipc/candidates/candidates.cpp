@@ -55,7 +55,7 @@ void Candidates::build(
             Eigen::MatrixXi(), Eigen::MatrixXi(), inflation_radius);
 
         broad_phase->detect_vertex_vertex_candidates(vv_candidates);
-        for (auto& [vi, vj] : vv_candidates) {
+        for (auto& [vi, vj, mat_pair] : vv_candidates) {
             vi = mesh.codim_vertices()[vi];
             vj = mesh.codim_vertices()[vj];
         }
@@ -94,12 +94,13 @@ void Candidates::build(
         broad_phase->build(V, CE, Eigen::MatrixXi(), inflation_radius);
 
         broad_phase->detect_edge_vertex_candidates(ev_candidates);
-        for (auto& [ei, vi] : ev_candidates) {
+        for (auto& [ei, vi, mat_pair] : ev_candidates) {
             assert(vi < mesh.codim_vertices().size());
             ei = mesh.codim_edges()[ei];    // Map back to mesh.edges
             vi = mesh.codim_vertices()[vi]; // Map back to vertices
         }
     }
+
 }
 
 void Candidates::build(
@@ -129,7 +130,7 @@ void Candidates::build(
             Eigen::MatrixXi(), Eigen::MatrixXi(), inflation_radius);
 
         broad_phase->detect_vertex_vertex_candidates(vv_candidates);
-        for (auto& [vi, vj] : vv_candidates) {
+        for (auto& [vi, vj, mat_pair] : vv_candidates) {
             vi = mesh.codim_vertices()[vi];
             vj = mesh.codim_vertices()[vj];
         }
@@ -174,12 +175,12 @@ void Candidates::build(
         broad_phase->build(V_t0, V_t1, CE, Eigen::MatrixXi(), inflation_radius);
 
         broad_phase->detect_edge_vertex_candidates(ev_candidates);
-        for (auto& [ei, vi] : ev_candidates) {
+        for (auto& [ei, vi, mat_pair] : ev_candidates) {
             assert(vi < mesh.codim_vertices().size());
             ei = mesh.codim_edges()[ei];    // Map back to mesh.edges
             vi = mesh.codim_vertices()[vi]; // Map back to vertices
         }
-    }
+    }  
 }
 
 bool Candidates::is_step_collision_free(
@@ -317,8 +318,8 @@ double Candidates::compute_cfl_stepsize(
     // If alpha_F < 0.5 * alpha_C, then we should do full CCD.
     if (alpha_F < 0.5 * alpha_C) {
         return ipc::compute_collision_free_stepsize(
-            mesh, vertices_t0, vertices_t1, min_distance, //
-            broad_phase_method, narrow_phase_ccd);
+            mesh, vertices_t0, vertices_t1, min_distance, broad_phase_method,
+            narrow_phase_ccd);
     }
     return std::min(alpha_C, alpha_F);
 }
@@ -405,3 +406,5 @@ bool Candidates::save_obj(
 }
 
 } // namespace ipc
+
+
